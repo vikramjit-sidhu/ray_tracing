@@ -1,0 +1,1 @@
+Based on the book by Peter Shirley, "Ray Tracing in one weekend"
