@@ -4,9 +4,10 @@
 vec3 color(const ray& r) {
 	vec3 ray_unit_direction = unit_vector(r.direction());
 	// Color decided based on y-coordinate
-	float t = 0.5 * (ray_unit_direction.y() + 1.0);
+	float blending_factor = 0.5 * (ray_unit_direction.y() + 1.0);
 	// combination of blue (0.5,0.7,1.0) and white (1,1,1) to get intermediate color
-	return (1.0-t) * vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
+	vec3 blended_color = (1.0-blending_factor) * vec3(1.0, 1.0, 1.0) + blending_factor*vec3(0.5, 0.7, 1.0);
+	return blended_color;
 }
 
 

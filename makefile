@@ -13,7 +13,7 @@ CFLAGS += -g
 # INCLUDES = vec3.hpp
 
 # define the C source files
-SRCS = outputImageUsingRays.cpp
+SRCS = 2_image_sphere.cpp
 
 # define the executable file 
 MAIN = ray_tracer_output.out
