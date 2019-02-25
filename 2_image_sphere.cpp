@@ -2,20 +2,26 @@
 #include "ray.hpp"
 
 
-bool hit_sphere(const vec3& centre, float radius, const ray& r) {
+float hit_sphere(const vec3& centre, float radius, const ray& r) {
 	/**
 	 * Solve a quadratic equation to check if the ray hits the sphere
 	 */
-	vec3 vector_origin_sphere_centre = r.origin() - centre;
+	vec3 vector_from_ray_origin_sphere_centre = r.origin() - centre;
 	vec3 ray_direction = r.direction();
 	
 	float a = dot(ray_direction, ray_direction);
-	float b = 2 * dot(vector_origin_sphere_centre, ray_direction);
-	float c = dot(vector_origin_sphere_centre, vector_origin_sphere_centre) - radius*radius;
+	float b = 2 * dot(vector_from_ray_origin_sphere_centre, ray_direction);
+	float c = dot(vector_from_ray_origin_sphere_centre, vector_from_ray_origin_sphere_centre) - radius*radius;
 
 	float discriminant = b*b - 4*a*c;
 
-	return (discriminant > 0);
+	if (discriminant < 0){
+		return -1.0;
+	}
+	else {
+		// We want the normal pointing towards the camera
+		return (-b - sqrt(discriminant)) / (2.0*a);
+	}
 }
 
 
@@ -23,8 +29,11 @@ vec3 color(const ray& r) {
 	// Check if sphere is hit
 	vec3 sphere_centre (0,0,-1);
 	float sphere_radius = 0.5;
-	if (hit_sphere(sphere_centre, sphere_radius, r)) {
-		return vec3(1.0, 0.0, 0.0);
+	float t = hit_sphere(sphere_centre, sphere_radius, r);
+
+	if (t>0.0) {
+		vec3 normal = unit_vector(r.point_at_parameter(t) - sphere_centre);
+		return (0.5*vec3(normal.x()+1, normal.y()+1, normal.z()+1));
 	}
 
 	vec3 ray_unit_direction = unit_vector(r.direction());
